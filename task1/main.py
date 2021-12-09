@@ -3,6 +3,9 @@ from serializers import XMLSerializer, JSONSerializer
 from json_parser import JSONParser
 from models import Room, Student
 from output import output
+from move_students_to_rooms import move_students_to_rooms
+from extract_data import extract_data
+from dataclasses import asdict
 
 
 def main():
@@ -11,20 +14,18 @@ def main():
     console_parser = ConsoleParser(formats)
     console_parser.read_console_args()
 
-    room_list = JSONParser.parse_file(console_parser.args.r)
-    student_list = JSONParser.parse_file(console_parser.args.s)
+    room_list = JSONParser.parse_file(console_parser.args.rooms)
+    student_list = JSONParser.parse_file(console_parser.args.students)
 
-    rooms = []
-    for room in room_list:
-        rooms.append(Room(room))
+    rooms = extract_data(room_list, Room)
+    students = extract_data(student_list, Student)
 
-    for student in student_list:
-        rooms[student['room']].add_student(Student(student))
+    move_students_to_rooms(rooms, students)
 
-    rooms = [room.to_dict() for room in rooms]
+    rooms = [asdict(room) for room in rooms]
     text = console_parser.args.serializer.serialize(rooms)
 
-    output(text, console_parser.args.f)
+    output(text, console_parser.args.format)
 
 
 if __name__ == '__main__':

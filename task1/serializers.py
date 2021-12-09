@@ -1,10 +1,19 @@
+from abc import ABC, abstractmethod
 from xml.dom.minidom import parseString
 from json import dumps
 
 from dicttoxml import dicttoxml
 
 
-class XMLSerializer:
+class SerializerInterface(ABC):
+    """Interface for all serializers"""
+    @staticmethod
+    @abstractmethod
+    def serialize(data: list[dict]) -> str:
+        pass
+
+
+class XMLSerializer(SerializerInterface):
     """Class for serializing xml"""
     @staticmethod
     def serialize(data: list[dict]) -> str:
@@ -13,7 +22,7 @@ class XMLSerializer:
         return result
 
 
-class JSONSerializer:
+class JSONSerializer(SerializerInterface):
     """Class for serializing xml"""
     @staticmethod
     def serialize(data: list[dict]) -> str:

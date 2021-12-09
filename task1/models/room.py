@@ -1,4 +1,4 @@
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, field
 
 from .student import Student
 
@@ -8,17 +8,8 @@ class Room:
     """Model to store data of rooms"""
     id: int
     name: str
-    students: list[Student]
-
-    def __init__(self, data_dict: dict):
-        self.id = data_dict['id']
-        self.name = data_dict['name']
-        self.students = []
+    students: list[Student] = field(default_factory=list)
 
     def add_student(self, student: Student) -> None:
         """Add student to the students field"""
         self.students.append(student)
-
-    def to_dict(self) -> dict:
-        """Convert instance to dict"""
-        return asdict(self)
