@@ -1,5 +1,8 @@
 from functools import total_ordering
 
+from replace_symbols import replace_symbols
+from normalize_length import normalize_length
+
 
 @total_ordering
 class Version:
@@ -12,47 +15,16 @@ class Version:
     }
 
     def __init__(self, version):
-        version_list = Version.replace_symbols(version).split('.')
+        version_list = replace_symbols(version, self.must_be_replaced).split('.')
         self.version = [int(i) for i in version_list]
 
-    def __lt__(self, other):
-        if len(self.version) != len(other.version):
-            version1, version2 = Version.normalize_length(self.version, other.version)
-            return version1 < version2
-        return self.version < other.version
-
     def __gt__(self, other):
-        if len(self.version) != len(other.version):
-            version1, version2 = Version.normalize_length(self.version, other.version)
-            return version1 > version2
-        return self.version > other.version
+        version1, version2 = normalize_length(self.version.copy(), other.version.copy())
+        return version1 > version2
 
-    def __ne__(self, other):
-        if len(self.version) != len(other.version):
-            version1, version2 = Version.normalize_length(self.version, other.version)
-            return version1 != version2
-        return self.version != other.version
-
-    @staticmethod
-    def replace_symbols(version: str) -> str:
-        """Replace symbols which must be replaced"""
-        for k, v in Version.must_be_replaced.items():
-            if k in version:
-                version = version.replace(k, v)
-        return version
-
-    @staticmethod
-    def normalize_length(version1: list, version2: list):
-        """Normalizing length of versions"""
-        if len(version1) < len(version2):
-            diff = len(version2) - len(version1)
-            for i in range(diff):
-                version1.append(0)
-        else:
-            diff = len(version1) - len(version2)
-            for i in range(diff):
-                version2.append(0)
-        return version1, version2
+    def __eq__(self, other):
+        version1, version2 = normalize_length(self.version.copy(), other.version.copy())
+        return version1 == version2
 
 
 def main():
