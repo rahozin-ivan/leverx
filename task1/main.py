@@ -3,9 +3,8 @@ from serializers import XMLSerializer, JSONSerializer
 from json_parser import JSONParser
 from models import Room, Student
 from output import output
-from move_students_to_rooms import move_students_to_rooms
+from merge_data import move_students_to_rooms
 from extract_data import extract_data
-from dataclasses import asdict
 
 
 def main():
@@ -22,7 +21,6 @@ def main():
 
     move_students_to_rooms(rooms, students)
 
-    rooms = [asdict(room) for room in rooms]
     text = console_parser.args.serializer.serialize(rooms)
 
     output(text, console_parser.args.format)
