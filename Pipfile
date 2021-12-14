@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 dicttoxml = "*"
+mysql-connector-python = "*"
 
 [dev-packages]
 
