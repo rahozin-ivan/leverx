@@ -13,18 +13,22 @@ class Version:
         'b': '.-2',
         'rc': '.-1',
     }
+    normal_length = 5
 
     def __init__(self, version):
+        self.version = self._configure_version(version)
+
+    def _configure_version(self, version):
         version_list = replace_symbols(version, self.must_be_replaced).split('.')
-        self.version = [int(i) for i in version_list]
+        version = [int(i) for i in version_list]
+        normalize_length(version, self.normal_length)
+        return version
 
     def __gt__(self, other):
-        version1, version2 = normalize_length(self.version.copy(), other.version.copy())
-        return version1 > version2
+        return self.version > other.version
 
     def __eq__(self, other):
-        version1, version2 = normalize_length(self.version.copy(), other.version.copy())
-        return version1 == version2
+        return self.version == other.version
 
 
 def main():
