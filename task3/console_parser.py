@@ -15,7 +15,6 @@ class ConsoleParser(ArgumentParser):
         self.add_argument("-database", "--db", dest="database", type=str)
         self.formats = formats
         self.args = None
-        self.db_config = None
 
     def read_console_args(self) -> None:
         """Read console arguments"""
